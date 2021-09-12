@@ -16,12 +16,13 @@ class DashboardController extends Controller
     {
         $admin = Admin::where('status', '0')->count();
         $penagih = Admin::where('status', '1')->count();
-        $user = User::count();
-
+        $user = User::where('status', '1')->count();
+        $userInaktif = User::where('status', '0')->count();
         return view('admin.dashboard', [
             'admin' => $admin,
             'penagih' => $penagih,
             'user' => $user,
+            'userInaktif' => $userInaktif
         ]);
     }
 

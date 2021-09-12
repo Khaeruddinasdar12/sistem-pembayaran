@@ -48,7 +48,7 @@
 				<div class="small-box bg-warning">
 					<div class="inner">
 						<h3>{{$user}}</h3>
-						<p>Jumlah User</p>
+						<p>Jumlah User Aktif</p>
 					</div>
 					<div class="icon">
 						<i class="fas fa-user-tag"></i>
@@ -56,18 +56,18 @@
 					<a href="{{route('user.index')}}" class="small-box-footer">Lihat <i class="fas fa-arrow-circle-right"></i></a>
 				</div>
 			</div>
-			<!-- <div class="col-lg-3 col-6">
+			<div class="col-lg-3 col-6">
 				<div class="small-box bg-dark">
 					<div class="inner">
-						<h3>5</h3>
-						<p>Manage Pengecer</p>
+						<h3>{{$userInaktif}}</h3>
+						<p>Jumlah User Inaktif</p>
 					</div>
 					<div class="icon">
 						<i class="fas fa-users"></i>
 					</div>
-					<a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+					<a href="{{route('user.inaktif')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 				</div>
-			</div> -->
+			</div>
 		</div>
 		<!-- /.row -->
 		<!-- Main row -->
