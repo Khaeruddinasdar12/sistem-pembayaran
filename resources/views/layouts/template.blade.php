@@ -47,7 +47,7 @@
             </a>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="">
+              <a class="dropdown-item" href="{{route('admin.profile')}}">
                 <span class="fas fa-user"></span> Profile
               </a>
               <a class="dropdown-item" href="{{ route('admin.logout') }}"
@@ -104,35 +104,31 @@
             </a>
           </li>
 
-          <!-- <li class="nav-item {{ request()->is('admin/event') || request()->is('admin/event/*')  ? 'has-treeview menu-open' : '' }}">
-            <a href="#" class="nav-link {{ request()->is('admin/event') || request()->is('admin/event/*') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-calendar-week"></i>
+          <li class="nav-item {{ request()->is('admin/all-user') || request()->is('admin/aktif-user') || request()->is('admin/inaktif-user')  ? 'has-treeview menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->is('admin/all-user') || request()->is('admin/aktif-user') || request()->is('admin/inaktif-user') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-users"></i>
               <p>
-                Event
+                User
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="" class="nav-link  {{ request()->is('admin/event/create') ? 'active' : '' }}">
+                <a href="{{route('user.index')}}" class="nav-link  {{ request()->is('admin/aktif-user') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Tambah Event</p>
+                  <p>Aktif User</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('user.inaktif')}}" class="nav-link  {{ request()->is('admin/inaktif-user') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Inaktif User</p>
                 </a>
               </li>
             </ul>
-          </li> -->
-
-          <li class="nav-item">
-            <a href="{{route('user.index')}}" class="nav-link {{ request()->is('admin/user') ? 'active' : '' }}">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                All User
-              </p>
-            </a>
           </li>
 
           @if(Auth::guard('admin')->user()->status == '0')
-
           <li class="nav-item">
             <a href="{{route('laporan')}}" class="nav-link {{ request()->is('admin/laporan') ? 'active' : '' }}">
               <i class="nav-icon fas fa-chart-bar"></i>

@@ -14,15 +14,15 @@ class AdminSeeder extends Seeder
         ]);
 
         DB::table('admins')->insert([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
+            'name' => 'Ikki',
+            'email' => 'ikki@gmail.com',
             'password' => bcrypt(12345678),
-            'status' => '1', //penagih
+            'status' => '0', //admin
         ]);
 
         DB::table('admins')->insert([
-            'name' => 'Penagih',
-            'email' => 'penagih@gmail.com',
+            'name' => 'Tris',
+            'email' => 'tris@gmail.com',
             'password' => bcrypt(12345678),
             'status' => '1', //penagih
         ]);

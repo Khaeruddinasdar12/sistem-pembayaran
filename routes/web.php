@@ -1,9 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-
-
 Auth::routes([
     'register' => false
 ]);
@@ -17,31 +14,17 @@ Route::get('/profile', 'HomeController@profile')->name('profile');
 Route::post('/ubah-password', 'HomeController@ubahPassword')->name('ubah.password');
 
 Route::get('/pdf/{id}', 'TagihanController@pdf')->name('pdf');
-// Route::get('/pdf/{id}', function(){
-//     $dt = array(
-//         'meter_bulan_ini' => 20,
-//         'meter_bulan_lalu' => 14,
-//         'total' => 50000,
-//         'created_at' => '5 september',
-//         'admin' => array('name' => 'khaeruddin asdar')
-//     );
-//     // return $dt;
-//     return view('user.pdf', [
-//         'dt' => $dt,
-//         'name' => 'Mansyur'
-//     ]);
-// });
 Route::get('/pdf-test', function(){
     return view('user.pdf-test');
 });
-
-
 
 Route::prefix('admin')->group(function() {
     // AUTH
     Route::get('/login', 'Auth\AdminAuthController@getLogin')->name('admin.login');
     Route::post('/login', 'Auth\AdminAuthController@postLogin')->name('admin.submit.login');
     Route::post('/logout', 'Auth\AdminAuthController@postLogout')->name('admin.logout');
+    Route::get('/profile', 'Admin\DashboardController@profile')->name('admin.profile');
+    Route::post('/profile', 'Admin\DashboardController@updateProfile')->name('admin.profile');
     // END AUTH
 
     // DASHBOARD
@@ -51,10 +34,15 @@ Route::prefix('admin')->group(function() {
 
 
     // USER
-    Route::get('/user', 'Admin\UserController@index')->name('user.index');
-    Route::post('/user', 'Admin\UserController@store')->name('user.store');
+    Route::get('/inaktif-user', 'Admin\UserController@inaktifIndex')->name('user.inaktif');
+    Route::get('/table-user-inaktif', 'Admin\UserController@tableInaktifUser')->name('table.user.inaktif');
 
-    Route::get('/table-user', 'Admin\UserController@tableUser')->name('table.user');
+    Route::get('/aktif-user', 'Admin\UserController@index')->name('user.index');
+    Route::post('/aktif-user', 'Admin\UserController@store')->name('user.store');
+    Route::get('/table-user-aktif', 'Admin\UserController@tableAktifUser')->name('table.user.aktif');
+
+    Route::put('status-user/{id}', 'Admin\UserController@status')->name('user.status');
+    Route::put('edit-user', 'Admin\UserController@update')->name('user.edit');
     // END USER
 
     // PENAGIHAN

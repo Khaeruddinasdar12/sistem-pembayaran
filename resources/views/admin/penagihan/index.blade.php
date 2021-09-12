@@ -9,20 +9,16 @@ Penagihan
 @endsection
 
 @section('content')
-<!-- Content Header (Page header) -->
 <div class="content-header">
 </div>
-<!-- /.content-header -->
+
 <section class="content">
   <div class="row">
     <div class="col-12">
-
       <div class="card">
         <div class="card-header">
           <h2 class="card-title"><i class="fa fa-calendar"></i> Penagihan</h2>
-
         </div>
-        <!-- /.card-header -->
         <div class="card-body">
           <div class="alert alert-light">
             <table>
@@ -30,6 +26,11 @@ Penagihan
                 <td>Nama</td>
                 <td>:</td>
                 <td>{{$user->name}}</td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td>:</td>
+                <td>@if($user->status == '0') <span class="badge badge-pill badge-warning">Tidak Aktif</span> @else <span class="badge badge-pill badge-success">Aktif</span> @endif</td>
               </tr>
               <tr>
                 <td>Email</td>
@@ -49,11 +50,13 @@ Penagihan
              <div class="float-left">
               <h4 >Laporan Tagihan</h4>
             </div>
+            @if($user->status == '1')
             <div class="float-right">
               <button class="btn btn-primary" data-toggle="modal" data-target="#tambah-tagihan"><i class="fa fa-plus"></i> Tambah Tagihan</button>
             </div>
             <br> 
             <br>
+            @endif
 
             <div class="table-responsive-sm">
               <table class="table table-bordered" style="width:100% !important; ">

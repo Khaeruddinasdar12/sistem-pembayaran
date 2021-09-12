@@ -8,6 +8,16 @@
         <div class="card-header"><i class="nav-icon fas fa-tachometer-alt"></i> {{ __('Dashboard') }}</div>
 
         <div class="card-body">
+          @if(Auth::user()->status == '0')
+          <div class="alert alert-danger" role="alert">
+            <strong>Whoops !</strong>
+            <br>
+            Saat ini akun Anda dinonaktifkan! Silakan datang ke kantor untuk pengajuan pengaktifan kembali!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          @endif
           <div class="alert alert-success" role="alert">
             <i class="nav-icon fas fa-door-open"></i> Selamat Datang {{Auth::user()->name}} - <a href="{{route('profile')}}" class="text-info">Profile</a>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
