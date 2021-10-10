@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Auth;
+use App\Laporan;
 class HomeController extends Controller
 {
     public function __construct()
@@ -35,5 +36,12 @@ class HomeController extends Controller
 
         auth()->guard('web')->logout();
         return redirect()->route('login');
+    }
+
+    public function email()
+    {
+        $data = Laporan::with('user')->with('admin')->find(1);
+        // return $data;
+        return view('email', ['data'=> $data]);
     }
 }

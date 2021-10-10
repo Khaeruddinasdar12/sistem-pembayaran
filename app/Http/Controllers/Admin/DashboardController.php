@@ -56,11 +56,6 @@ class DashboardController extends Controller
             $data->save();
 
             return redirect()->back()->with('success', 'Berhasil Mengubah Profile');
-        }
-        
-        
-
-        
-        
+        }        
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes([
     'register' => false
 ]);
+Route::get('/email', 'HomeController@email');
 
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');

@@ -8,6 +8,7 @@ use App\User;
 use App\Laporan;
 use Carbon\Carbon;
 use Auth;
+use Mail;
 class PenagihanController extends Controller
 {
     public function __construct()
@@ -69,26 +70,73 @@ class PenagihanController extends Controller
         $data->meter_bulan_ini = $request->meter_bulan_ini;
         $data->pemakaian = $request->meter_bulan_ini - $meter_bulan_lalu;
         $data->total = ($request->meter_bulan_ini - $meter_bulan_lalu)*6000;
-        if($request->cek == '1') {
+        
+        $data->user_id = $id;
+        $data->updated_by = Auth::guard('admin')->user()->id;
+        
+
+        if($request->cek == '1') { //lunasi sekarang
             $data->status = '1';
             $data->lunas_at = $date;
             $pesan = 'Dan Melunasi Tagihan.';
+            $data->save();
         }
-        $data->user_id = $id;
-        $data->updated_by = Auth::guard('admin')->user()->id;
-        $data->save();
 
-        return $arrayName = array(
-            'status' => 'success',
-            'pesan' => 'Berhasil Menambah Tagihan '.$pesan
-        );
-    }
-
-    public function update($id)
-    {
-        $data = Laporan::find($id);
-        $data->status = '1';
         $data->save();
+            //send email
+        $dt = Laporan::with('user')->with('admin')->find($data->id);
+        if($dt->user->email != '') {
+            $email = $dt->user->email;
+                $send = array( //data yang dikirim
+                    'name' => $dt->user->name,
+                    'meter_bulan_ini' => $dt->meter_bulan_ini,
+                    'total' => $dt->total,
+                    'created_at' => $dt->created_at,
+                    'admin' => $dt->admin->name,
+                    'status' => $dt->status,
+                );
+                $judul= config('app.name');
+                Mail::send('email', $send, function($mail) use($email, $judul) {
+                    $mail->to($email, 'no-reply')
+                    ->subject($judul);
+                    $mail->from('payment@gmail.com', config('app.name'));        
+                });
+                if (Mail::failures()) {
+                    return $arrayName = array('status' => 'error' , 'pesan' => 'Gagal menigirim email' );
+                }
+            }//end send email
+
+            return $arrayName = array(
+                'status' => 'success',
+                'pesan' => 'Berhasil Menambah Tagihan '.$pesan
+            );
+        }
+
+        public function update($id)
+        {
+            $data = Laporan::with('user')->with('admin')->find($id);
+            $data->status = '1';
+            $data->save();
+            if($data->user->email != '') {
+                $email = $data->user->email;
+            $send = array( //data yang dikirim
+                'name' => $data->user->name,
+                'meter_bulan_ini' => $data->meter_bulan_ini,
+                'total' => $data->total,
+                'created_at' => $data->created_at,
+                'admin' => $data->admin->name,
+                'status' => $data->status,
+            );
+            $judul= config('app.name');
+            Mail::send('email', $send, function($mail) use($email, $judul) {
+                $mail->to($email, 'no-reply')
+                ->subject($judul);
+                $mail->from('payment@gmail.com', config('app.name'));        
+            });
+            if (Mail::failures()) {
+                return $arrayName = array('status' => 'error' , 'pesan' => 'Gagal menigirim email' );
+            }
+        }
         return $arrayName = array(
             'status' => 'success',
             'pesan' => 'Tagihan Dilunaskan'
