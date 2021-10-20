@@ -29,7 +29,7 @@ class TagihanController extends Controller
         $auth_id = Auth::user()->id;
         $data = Laporan::where('user_id', $auth_id)
         ->with('admin:id,name')
-        ->where('status', '0')
+        ->where('status', '1')
         ->orderBy('created_at', 'asc')
         ->paginate(10);
         return view('user.riwayat', ['data' => $data]);
