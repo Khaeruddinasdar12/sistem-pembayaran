@@ -28,13 +28,13 @@ class LaporanController extends Controller
                 ->where('status', $request->status)
                 ->whereMonth('created_at', $request->bulan)
                 ->whereYear('created_at', $request->tahun)
-                ->paginate(4);
+                ->paginate(12);
                 $bulan = $this->convert($request->bulan);
                 $total = Laporan::where('status', $request->status)->sum('total');
             } else if(isset($request->status) && !$request->bulan) {
                 $data = Laporan::with('user:id,name,alamat')
                 ->where('status', $request->status)
-                ->paginate(4);
+                ->paginate(12);
                 $total = Laporan::where('status', $request->status)->sum('total');
             } else if(!isset($request->status) && $request->bulan) {
                 if(!$request->tahun) {
@@ -43,15 +43,15 @@ class LaporanController extends Controller
                 $data = Laporan::with('user:id,name,alamat')
                 ->whereMonth('created_at', $request->bulan)
                 ->whereYear('created_at', $request->tahun)
-                ->paginate(4);
+                ->paginate(12);
                 $total = Laporan::sum('total');
                 $bulan = $this->convert($request->bulan);
             } else {
-                $data = Laporan::with('user:id,name,alamat')->paginate(4);
+                $data = Laporan::with('user:id,name,alamat')->paginate(12);
                 $total = Laporan::sum('total');
             }
         } else {
-            $data = Laporan::with('user:id,name,alamat')->paginate(4);
+            $data = Laporan::with('user:id,name,alamat')->paginate(12);
             $total = Laporan::sum('total');
         }
 
