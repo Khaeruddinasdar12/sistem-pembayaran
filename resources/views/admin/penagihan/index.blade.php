@@ -105,31 +105,34 @@ Penagihan
                       data-admin="{{$dt->admin->name}}"
                       data-admin_id="{{$dt->admin->id}}" 
                       >
-                        <i class="fa fa-eye"></i> 
-                      </button>
-                      @if($dt->status == '0')
-                      <button class="btn btn-success btn-xs" title="Lunaskan Tagihan" 
-                      href="{{$dt->id}}"
-                      onclick="lunas()"
-                      id="lunas_id">
-                      <i class="fa fa-check"></i> 
+                      <i class="fa fa-eye"></i> 
                     </button>
-                    @else
-                    <button href="" class="btn btn-success btn-xs disabled">
-                      <i class="fa fa-check"></i> 
-                    </button>
-                    @endif
-                  </td>
-                </tr>
-                @endforeach
-              </tbody> 
-            </table>
-            {{$laporan->links()}}
-          </div>
-        </div>
+                    @if($dt->status == '0')
+                    <button class="btn btn-success btn-xs" title="Lunaskan Tagihan" 
+                    href="{{$dt->id}}"
+                    onclick="lunas()"
+                    id="lunas_id">
+                    <i class="fa fa-check"></i> 
+                  </button>
+                  @else
+                  <button class="btn btn-success btn-xs" title="Kembalikan Status Tagihan" 
+                  href="{{$dt->id}}"
+                  onclick="undo()"
+                  id="lunas_id">
+                  <i class="fa fa-undo"></i> 
+                </button>
+                @endif
+              </td>
+            </tr>
+            @endforeach
+          </tbody> 
+        </table>
+        {{$laporan->links()}}
       </div>
     </div>
   </div>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -233,7 +236,7 @@ Penagihan
         </table>  
       </div>
     </div>
-</div>
+  </div>
 </div>
 <!-- End Modal Detail -->
 <!-- END MODALS -->
@@ -313,7 +316,51 @@ Penagihan
     $(document).on('click', '#lunas_id', function(){
       Swal.fire({
         title: 'Bayar Tagihan ?',
-        text: "Anda tidak dapat mengembalikan status tagihan!",
+        text: "Anda akan mengubah status tagihan ini menjadi lunas",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Lanjutkan!',
+        timer: 6500
+      }).then((result) => {
+        if (result.value) {
+          var me = $(this),
+          url = me.attr('href'),
+          token = $('meta[name="csrf-token"]').attr('content');
+          $.ajax({
+            url: url,
+            method: "POST",
+            data : {
+              '_method' : 'PUT',
+              '_token'  : token
+            },
+            success:function(data){
+              if(data.status == 'success') {
+                successToRelaoad(data.status, data.pesan);
+              } else {
+                berhasil(data.status, data.pesan);
+              }
+            },
+            error: function(xhr, status, error){
+              var error = xhr.responseJSON; 
+              if ($.isEmptyObject(error) == false) {
+                $.each(error.errors, function(key, value) {
+                  gagal(key, value);
+                });
+              }
+            } 
+          });
+        }
+      });
+    });
+  }
+
+  function undo() { // melunaskan tagihan
+    $(document).on('click', '#lunas_id', function(){
+      Swal.fire({
+        title: 'Kembalikan Status Tagihan ?',
+        text: "Anda akan mengaktifkan kembali tagihan ini",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

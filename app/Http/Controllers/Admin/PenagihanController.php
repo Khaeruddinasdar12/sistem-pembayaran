@@ -115,31 +115,41 @@ class PenagihanController extends Controller
         public function update($id)
         {
             $data = Laporan::with('user')->with('admin')->find($id);
-            $data->status = '1';
-            $data->save();
-            if($data->user->email != '') {
-                $email = $data->user->email;
-            $send = array( //data yang dikirim
-                'name' => $data->user->name,
-                'meter_bulan_ini' => $data->meter_bulan_ini,
-                'total' => $data->total,
-                'created_at' => $data->created_at,
-                'admin' => $data->admin->name,
-                'status' => $data->status,
-            );
-            $judul= config('app.name');
-            Mail::send('email', $send, function($mail) use($email, $judul) {
-                $mail->to($email, 'no-reply')
-                ->subject($judul);
-                $mail->from('payment@gmail.com', config('app.name'));        
-            });
-            if (Mail::failures()) {
-                return $arrayName = array('status' => 'error' , 'pesan' => 'Gagal menigirim email' );
+            if($data->status == '1') {
+                $data->status = '0';
+                $data->save();
+                return $arrayName = array(
+                    'status' => 'success',
+                    'pesan' => 'Berhasil Mengembalikan Status Tagihan'
+                );
+            } else {
+                $data->status = '1';
+                $data->save();
+                if($data->user->email != '') {
+                    $email = $data->user->email;
+                    $send = array( //data yang dikirim
+                        'name' => $data->user->name,
+                        'meter_bulan_ini' => $data->meter_bulan_ini,
+                        'total' => $data->total,
+                        'created_at' => $data->created_at,
+                        'admin' => $data->admin->name,
+                        'status' => $data->status,
+                    );
+                    $judul= config('app.name');
+                    Mail::send('email', $send, function($mail) use($email, $judul) {
+                        $mail->to($email, 'no-reply')
+                        ->subject($judul);
+                        $mail->from('payment@gmail.com', config('app.name'));        
+                    });
+                    if (Mail::failures()) {
+                        return $arrayName = array('status' => 'error' , 'pesan' => 'Gagal menigirim email' );
+                    }
+                }
             }
+
+            return $arrayName = array(
+                'status' => 'success',
+                'pesan' => 'Tagihan Dilunaskan'
+            );
         }
-        return $arrayName = array(
-            'status' => 'success',
-            'pesan' => 'Tagihan Dilunaskan'
-        );
     }
-}
