@@ -37,11 +37,12 @@ class TagihanController extends Controller
 
     public function pdf($id)
     {
+        // return ' haha';
         $auth_id = Auth::user()->id;
         $data = Laporan::where('user_id', $auth_id)
         ->where('id', $id)
         ->with('admin:id,name')
-        ->where('status', '0')
+        ->where('status', '1')
         ->orderBy('created_at', 'asc')
         ->first();
         // return $data;
